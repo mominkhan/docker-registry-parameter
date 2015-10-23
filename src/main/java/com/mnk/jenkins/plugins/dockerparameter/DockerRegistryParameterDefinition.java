@@ -7,6 +7,7 @@ import com.cloudbees.plugins.credentials.common.StandardCredentials;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
+import com.ctc.wstx.util.StringUtil;
 import hudson.Extension;
 import hudson.Util;
 import hudson.cli.CLICommand;
@@ -168,14 +169,13 @@ public class DockerRegistryParameterDefinition extends ParameterDefinition {
     }
 
     public int getMaxItemLimit() {
-        if (this.maxItemLimit == Integer.MIN_VALUE) {
-            int max = Integer.MAX_VALUE;
+        this.maxItemLimit = Integer.MAX_VALUE;
+        if (StringUtils.isNotBlank(this.maxItems)) {
             try {
-                max = Integer.parseInt(maxItems);
+                this.maxItemLimit = Integer.parseInt(this.maxItems);
             } catch (NumberFormatException e) {
                 // NO-OP
             }
-            this.maxItemLimit = max;
         }
         return this.maxItemLimit;
     }
